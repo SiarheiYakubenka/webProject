@@ -6,4 +6,6 @@ public class Constants {
     public static final String KEY_DESCRIPTION = "description";
     public static final String KEY_DATE = "completionsDate";
     public static final String KEY_ID = "id";
+    public static final String KEY_USER = "user";
+    public static final String DELIMITER = ",";
 }

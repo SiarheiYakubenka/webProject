@@ -68,67 +68,26 @@ public class TaskImplDB extends BaseImplDB implements ITaskDAO {
     }
 
     @Override
-    public void delete(String userName, int id) {
+    public void delete(String userName, int... ids) {
         final String SQL = "update " + userName + "_tasks set isDelMarked=true where id=?";
-        proccesTask(SQL, id);
+        proccesTask(SQL, ids);
     }
 
     @Override
-    public void fix(String userName, int id) {
+    public void fix(String userName, int... ids) {
         final String SQL = "update " + userName + "_tasks set isFixed=true where id=?";
-        proccesTask(SQL, id);
+        proccesTask(SQL, ids);
     }
 
     @Override
-    public void recover(String userName, int id) {
+    public void recover(String userName, int... ids) {
         final String SQL = "update " + userName + "_tasks set isDelMarked=false, isFixed=false where id=?";
-        proccesTask(SQL, id);
+        proccesTask(SQL, ids);
     }
 
     @Override
-    public void remove(String userName, int id) {
+    public void remove(String userName, int... ids) {
         final String SQL = "delete from " + userName + "_tasks where id=?";
-        proccesTask(SQL, id);
+        proccesTask(SQL, ids);
     }
-
-
-    private int getId(String userName, Task task, PreparedStatement statement) throws SQLException {
-        int id = 0;
-        ResultSet rs = null;
-        try{
-            statement.setString(ConstantsSQL.INDEX_ONE, userName);
-            statement.setString(ConstantsSQL.INDEX_TWO, task.getDescription());
-            statement.setDate(ConstantsSQL.INDEX_THREE, task.getCompletionsDate());
-            rs = statement.executeQuery();
-            if (rs.next()) {
-                id = rs.getInt(ConstantsSQL.INDEX_ONE);
-            }
-            return id;
-        } finally {
-            DBManager.closeResultSets(rs);
-        }
-
-    }
-
-    private void actionTask(Task task, String sql) {
-        Connection connection = null;
-        PreparedStatement statement = null;
-        try {
-            connection = DBManager.getConnection();
-            statement = connection.prepareStatement(sql);
-            statement.setString(ConstantsSQL.INDEX_ONE, task.getDescription());
-            statement.setDate(ConstantsSQL.INDEX_TWO, task.getCompletionsDate());
-
-            statement.executeUpdate();
-
-
-        } catch (DaoException | SQLException | IllegalArgumentException e) {
-            LOGGER.log(Level.SEVERE, e.toString(), e);
-            throw new DaoException(e);
-        } finally {
-            DBManager.closeStatements(statement);
-            DBManager.closeConnection(connection);
-        }
-    }
-
 }

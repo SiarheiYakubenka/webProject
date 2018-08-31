@@ -1,9 +1,8 @@
 package by.gsu.epamlab.command.ifaces;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
+import by.gsu.epamlab.controllers.SessionRequestContent;
+import by.gsu.epamlab.ifaces.ITaskDAO;
 
 public interface ActionCommand {
-    String execute(HttpServletRequest request) throws IOException, ServletException;
+    void execute(SessionRequestContent content, ITaskDAO taskDAO);
 }

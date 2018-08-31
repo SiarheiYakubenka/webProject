@@ -108,8 +108,8 @@ $(document).ready(function(){
                 var now = new Date();
                 var today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
                 if (date < today) {
-                    overdueTasks += "<tr id='"+  data[i].id + "' ><td><input  type='checkbox'/></td><td>"
-                        + data[i].description + "</td><td>" +
+                    overdueTasks += "<tr id='"+  data[i].id + "' ><td><input  type='checkbox'/></td><td><p " + getCSSdescr() + ">"
+                        + data[i].description + "</p></td><td>" +
                         dateFormat(date) + "</td><td>" +
                         getButton(' Fix ', 'fix') + "</td><td>" +
                         getButtonMod('#updateTask', 'Update', 'update') + "</td><td>" +
@@ -120,7 +120,7 @@ $(document).ready(function(){
                     if (data[i].fileName != null) {
                         file = getDropBox(data[i].fileName);
                     }
-                    list += "<tr id='"+  data[i].id + "' ><td><input  type='checkbox'/></td><td>"
+                    list += "<tr id='"+  data[i].id + "' ><td><input  type='checkbox'/></td><td class='descrptn'>"
                         + data[i].description + "</td><td style='display: none'>" +
                         dateFormat(strToDate(data[i].completionsDate)) + "</td><td>" +
                         getButton(' Fix ', 'fix') + "</td><td>" +
@@ -153,7 +153,7 @@ $(document).ready(function(){
 
                     file = getDropBox(data[i].fileName);
                 }
-                list += "<tr id='"+  data[i].id + "' ><td><input type='checkbox'/></td><td>"
+                list += "<tr id='"+  data[i].id + "' ><td><input type='checkbox'/></td><td class='descrptn'>"
                     + data[i].description + "</td><td style='display: none'>" +
                     dateFormat(strToDate(data[i].completionsDate)) + "</td><td>" +
                     getButton(' Fix ', 'fix') + "</td><td>" +
@@ -177,7 +177,7 @@ $(document).ready(function(){
 
                     file = getDropBox(data[i].fileName);
                 }
-                list += "<tr id='"+  data[i].id + "' ><td><input type='checkbox'/></td><td>"
+                list += "<tr id='"+  data[i].id + "' ><td><input type='checkbox'/></td><td class='descrptn'>"
                     + data[i].description + "</td><td>" +
                     dateFormat(strToDate(data[i].completionsDate)) + "</td><td>" +
                     getButton(' Fix ', 'fix') + "</td><td>" +
@@ -196,7 +196,7 @@ $(document).ready(function(){
         if (data.length > 0) {
             var list = getTableHeader();
             for (var i = 0; i < data.length; i++) {
-                list += "<tr id='"+  data[i].id + "' ><td><input type='checkbox'/></td><td>"
+                list += "<tr id='"+  data[i].id + "' ><td><input type='checkbox'/></td><td class='descrptn'>"
                     + data[i].description + "</td><td>" +
                     dateFormat(strToDate(data[i].completionsDate)) + "</td><td>" +
                     getButtonMod('#deleteTask', 'Delete', 'delete-task')+ "</td></tr>";
@@ -213,7 +213,7 @@ $(document).ready(function(){
             $('#del-all').show();
             var list = getTableHeader();
             for (var i = 0; i < data.length; i++) {
-                list += "<tr id='"+  data[i].id + "' ><td><input type='checkbox'/></td><td>"
+                list += "<tr id='"+  data[i].id + "' ><td><input type='checkbox'/></td><td class='descrptn'>"
                     + data[i].description + "</td><td>" +
                     dateFormat(strToDate(data[i].completionsDate)) + "</td><td>" +
                     getButton('Recover', 'recover') + "</td><td>" +
@@ -232,7 +232,7 @@ $(document).ready(function(){
     }
 
     function getTableHeader() {
-        return "<table class='table'><tr><td colspan='6'><input id='checkAll' type='checkbox'/></td></tr>";
+        return "<table class='table'><tr><td colspan='7'><input id='checkAll' type='checkbox'/></td></tr>";
     }
 
     function getTableRow(data) {
@@ -524,5 +524,18 @@ $(document).ready(function(){
         "</button><div class='dropdown-menu'><a class='dropdown-item' href='#'>Download</a><a class='dropdown-item' href='#'>Delete</a>" +
         "</div>"
     }
+
+    function getCSSdescr() {
+        return "style= 'max-width: 300px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; cursor:pointer'" +
+            " data-toggle='popover' data-trigger='focus' ";
+    }
+
+    container.on('click','[data-toggle="popover"]', function () {
+        $(this).attr('data-content', $(this).text());
+
+        $('[data-toggle="popover"]').each(function(){$(this).popover()});
+
+    } );
+
 
 });

@@ -107,7 +107,6 @@
         </form>
     </div>
 </div>
-
 <footer>
     <%@include file="footer.jsp"%>
 </footer>
@@ -164,7 +163,7 @@
 
             <!-- Modal body -->
             <div class="modal-body">
-                <div id="del-body"></div>
+                <div id="del-body" style= 'max-width: 600px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis'></div>
             </div>
 
             <!-- Modal footer -->

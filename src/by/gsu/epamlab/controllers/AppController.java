@@ -1,5 +1,7 @@
 package by.gsu.epamlab.controllers;
 
+import by.gsu.epamlab.command.CommandException;
+import by.gsu.epamlab.command.TaskLogic;
 import by.gsu.epamlab.command.factory.ActionFactory;
 import by.gsu.epamlab.command.ifaces.ActionCommand;
 import by.gsu.epamlab.ifaces.BaseController;
@@ -37,8 +39,8 @@ public class AppController extends BaseController {
     private void getTasksJSON(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-            TaskKindEnum taskKind = TaskKindEnum.getKind(request);
-            List<Task> tasks = taskKind.getList(request);
+            SessionRequestContent content = new SessionRequestContent(request);
+            List<Task> tasks = TaskLogic.getTasks(content);
             if (tasks != null) {
                 Gson gsonBuilder = new GsonBuilder().create();
                 String json = gsonBuilder.toJson(tasks);
@@ -53,13 +55,13 @@ public class AppController extends BaseController {
 
     private void proccesRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String success = "false";
+        String success = "true";
         try {
-            ActionFactory client = new ActionFactory();
-            ActionCommand command = client.defineCommand(request);
-            success = command.execute(request);
-        } catch (ServletException | IOException | DaoException e) {
+            SessionRequestContent content = new SessionRequestContent(request);
+            TaskLogic.execute(content);
+        } catch (CommandException | DaoException e) {
             LOGGER.log(Level.SEVERE, e.toString(), e);
+            success = "false";
         }
         String json = "[{\"ok\":" + success + "}]";
         response.setContentType(Constants.TYPE_JSON);

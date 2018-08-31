@@ -33,13 +33,7 @@ public enum TaskCommandEnum {
         {
             this.command = new RecoverCommand();
         }
-    },
-    UPLOAD {
-        {
-            this.command = new UploadCommand();
-        }
-    }
-    ;
+    };
     ActionCommand command;
     public ActionCommand getCurrentCommand() {
         return command;
