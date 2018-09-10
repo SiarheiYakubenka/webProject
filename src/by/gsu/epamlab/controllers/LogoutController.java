@@ -13,7 +13,7 @@ public class LogoutController extends HttpServlet {
         HttpSession session = request.getSession();
         session.setAttribute(Constants.KEY_USER, null);
         session.invalidate();
-        response.sendRedirect(Constants.NAME_PROJECT_ROOT);
+        response.sendRedirect(request.getContextPath() + Constants.NAME_PROJECT_ROOT);
     }
 
 

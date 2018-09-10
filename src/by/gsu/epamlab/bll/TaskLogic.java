@@ -1,8 +1,8 @@
-package by.gsu.epamlab.command;
+package by.gsu.epamlab.bll;
 
-import by.gsu.epamlab.command.enums.TaskKindEnum;
-import by.gsu.epamlab.command.factory.ActionFactory;
-import by.gsu.epamlab.command.ifaces.ActionCommand;
+import by.gsu.epamlab.bll.command.enums.TaskKindEnum;
+import by.gsu.epamlab.bll.command.factory.ActionFactory;
+import by.gsu.epamlab.bll.command.ifaces.ActionCommand;
 import by.gsu.epamlab.controllers.SessionRequestContent;
 import by.gsu.epamlab.ifaces.ITaskDAO;
 import by.gsu.epamlab.model.beans.Task;

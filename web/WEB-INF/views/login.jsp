@@ -15,7 +15,7 @@
             <c:out value="${errorMessage}"></c:out>
         </div>
     </c:if>
-    <div class="container">
+    <div class="container" style="max-width:500px">
         <h2>Login form</h2>
         <form name="loginForm" method="POST" action="<c:url value='/login'/>">
             <div class="form-group">

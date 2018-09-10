@@ -1,4 +1,4 @@
-package by.gsu.epamlab.command.ifaces;
+package by.gsu.epamlab.bll.command.ifaces;
 
 import by.gsu.epamlab.model.beans.Task;
 

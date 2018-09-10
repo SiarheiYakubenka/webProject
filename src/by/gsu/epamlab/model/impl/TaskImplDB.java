@@ -2,8 +2,7 @@ package by.gsu.epamlab.model.impl;
 
 import by.gsu.epamlab.ifaces.ITaskDAO;
 import by.gsu.epamlab.model.beans.Task;
-import by.gsu.epamlab.model.services.ConstantsDB;
-import by.gsu.epamlab.model.services.DBManager;
+import by.gsu.epamlab.model.services.ConnectionPool;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -20,16 +19,21 @@ public class TaskImplDB extends BaseImplDB implements ITaskDAO {
     }
 
     public List<Task> getList(String userName, String condition) {
-        final String SQL = "select * from " + userName + "_tasks where " + condition;
+        final String SQL = ConstantsSQL.SELECT_TASKS_HEADER + condition;
         List<Task> tasks = new ArrayList<>();
         Connection connection = null;
-        PreparedStatement statement = null;
+        PreparedStatement statementTasks = null;
+        PreparedStatement statementId = null;
         ResultSet resultSet = null;
+        ConnectionPool pool = ConnectionPool.getInstance();
         try {
-            connection = DBManager.getConnection();
-            LOGGER.info(ConstantsDB.CONNECT_SUCCESS);
-            statement = connection.prepareStatement(SQL);
-            resultSet = statement.executeQuery();
+            connection = pool.getConnection();
+            statementId = connection.prepareStatement(ConstantsSQL.USER_ID);
+            statementTasks = connection.prepareStatement(SQL);
+            int userId = getId(userName, statementId);
+            statementTasks = connection.prepareStatement(SQL);
+            statementTasks.setInt(ConstantsSQL.INDEX_ONE, userId);
+            resultSet = statementTasks.executeQuery();
             int id;
             String description, fileName;
             Date completionsDate;
@@ -46,48 +50,42 @@ public class TaskImplDB extends BaseImplDB implements ITaskDAO {
             return tasks;
         } catch (DaoException | SQLException | IllegalArgumentException e) {
             LOGGER.log(Level.SEVERE, e.toString(), e);
-            return null;
+            throw new DaoException(e);
         } finally {
-            DBManager.closeResultSets(resultSet);
-            DBManager.closeStatements(statement);
-            DBManager.closeConnection(connection);
+            pool.closeResultSets(resultSet);
+            pool.closeStatements(statementTasks, statementId);
+            pool.returnConnection(connection);
         }
     }
 
     @Override
     public void add(String userName, Task task) {
-        final String ADD_TASK = "insert into " + userName + "_tasks (description, completionsDate)" +
-            " values (?, ?);";
-        actionTask(task, ADD_TASK);
+        actionTask(userName, task, ConstantsSQL.ADD_TASK);
     }
 
     @Override
     public void edit(String userName, Task task) {
-        final String SQL = "update " + userName + "_tasks set description=?, completionsDate=? where id=" + task.getId();
-        actionTask(task, SQL);
+        final String SQL = ConstantsSQL.UPDATE_TASK + task.getId();
+        actionTask(userName, task, SQL);
     }
 
     @Override
-    public void delete(String userName, int... ids) {
-        final String SQL = "update " + userName + "_tasks set isDelMarked=true where id=?";
-        proccesTask(SQL, ids);
+    public void delete(int... ids) {
+        proccesTask(ConstantsSQL.DELETE_TASK, ids);
     }
 
     @Override
-    public void fix(String userName, int... ids) {
-        final String SQL = "update " + userName + "_tasks set isFixed=true where id=?";
-        proccesTask(SQL, ids);
+    public void fix(int... ids) {
+        proccesTask(ConstantsSQL.FIX_TASK, ids);
     }
 
     @Override
-    public void recover(String userName, int... ids) {
-        final String SQL = "update " + userName + "_tasks set isDelMarked=false, isFixed=false where id=?";
-        proccesTask(SQL, ids);
+    public void recover(int... ids) {
+        proccesTask(ConstantsSQL.RECOVER_TASK, ids);
     }
 
     @Override
-    public void remove(String userName, int... ids) {
-        final String SQL = "delete from " + userName + "_tasks where id=?";
-        proccesTask(SQL, ids);
+    public void remove(int... ids) {
+        proccesTask(ConstantsSQL.REMOVE_TASK, ids);
     }
 }

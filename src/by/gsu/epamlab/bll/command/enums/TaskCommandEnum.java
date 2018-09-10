@@ -1,7 +1,7 @@
-package by.gsu.epamlab.command.enums;
+package by.gsu.epamlab.bll.command.enums;
 
-import by.gsu.epamlab.command.*;
-import by.gsu.epamlab.command.ifaces.ActionCommand;
+import by.gsu.epamlab.bll.command.*;
+import by.gsu.epamlab.bll.command.ifaces.ActionCommand;
 
 public enum TaskCommandEnum {
     ADD {

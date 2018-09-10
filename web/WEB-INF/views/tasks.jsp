@@ -18,8 +18,7 @@
     <%@include file="header.jsp"%>
 </header>
 
-<div class="container">
-    <form>
+<div id="cnt" class="container">
     <h2>Tasks</h2>
     <br>
     <ul class="nav nav-tabs" role="tablist">
@@ -75,7 +74,6 @@
     </div>
         <div class="tasks">
         </div>
-    </form>
     <div id="buttons-checkbox">
         <button id="del-all" style="display: none" class="btn " >Empty trash</button>
         <button id="fix-checked" style="display: none" class="btn " >Fix checked</button>
@@ -201,6 +199,23 @@
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
             </div>
 
+        </div>
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="date-show"></h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="desc-show"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
         </div>
     </div>
 </div>

@@ -16,7 +16,7 @@
             <hr>
         </c:if>
 
-    <div class="container">
+    <div class="container" style="max-width:500px">
         <h2>Registration form</h2>
         <form name="regForm" method="POST" action="<c:url value='/reg'/>">
             <div class="form-group">
@@ -41,5 +41,7 @@
     </div>
 
 </div>
+
+<%@include file="footer.jsp"%>
 </body>
 </html>

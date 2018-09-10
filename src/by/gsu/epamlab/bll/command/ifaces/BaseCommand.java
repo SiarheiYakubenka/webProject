@@ -1,7 +1,7 @@
-package by.gsu.epamlab.command.ifaces;
+package by.gsu.epamlab.bll.command.ifaces;
 
-import by.gsu.epamlab.command.Constants;
-import by.gsu.epamlab.command.util.HelperMetods;
+import by.gsu.epamlab.bll.ConstantsBLL;
+import by.gsu.epamlab.bll.command.util.HelperMetods;
 import by.gsu.epamlab.controllers.SessionRequestContent;
 import by.gsu.epamlab.model.beans.Task;
 import by.gsu.epamlab.model.beans.User;
@@ -14,9 +14,9 @@ public abstract class BaseCommand {
     private static final Logger LOGGER = Logger.getLogger(BaseCommand.class.getName());
 
     public void processCommand(SessionRequestContent content, ITaskCommand taskCmd) {
-        String strId = content.getParameter(Constants.KEY_ID);
+        String strId = content.getParameter(ConstantsBLL.KEY_ID);
         try {
-            String userName = ((User)content.getSessionAttribute(Constants.KEY_USER)).getName();
+            String userName = ((User)content.getSessionAttribute(ConstantsBLL.KEY_USER)).getName();
             int[] ids = HelperMetods.strToArrInt(strId);
             taskCmd.action(userName, ids);
         } catch (DaoException | NumberFormatException | NullPointerException e) {
@@ -26,10 +26,10 @@ public abstract class BaseCommand {
     }
 
     public void actionCommand(SessionRequestContent content, ITaskCommand taskCmd) {
-        String description = content.getParameter(Constants.KEY_DESCRIPTION);
-        String completionsDate = content.getParameter(Constants.KEY_DATE);
-        String strId = content.getParameter(Constants.KEY_ID);
-        String userName = ((User)content.getSessionAttribute(Constants.KEY_USER)).getName();
+        String description = content.getParameter(ConstantsBLL.KEY_DESCRIPTION);
+        String completionsDate = content.getParameter(ConstantsBLL.KEY_DATE);
+        String strId = content.getParameter(ConstantsBLL.KEY_ID);
+        String userName = ((User)content.getSessionAttribute(ConstantsBLL.KEY_USER)).getName();
         Task task = new Task();
         task.setDescription(description);
         task.setCompletionsDate(completionsDate);
@@ -42,6 +42,5 @@ public abstract class BaseCommand {
             LOGGER.log(Level.SEVERE,  e.toString(), e);
             throw new DaoException(e);
         }
-
     }
 }

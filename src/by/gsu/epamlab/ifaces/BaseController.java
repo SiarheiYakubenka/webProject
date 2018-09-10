@@ -33,4 +33,11 @@ public abstract class BaseController  extends HttpServlet {
         request.setAttribute(Constants.KEY_ERROR_MESSAGE, message);
         forward(url, request, response);
     }
+
+
+    protected void forwardJSON(HttpServletResponse response, String json) throws IOException {
+        response.setContentType(Constants.TYPE_JSON);
+        response.setCharacterEncoding(Constants.UTF_8);
+        response.getWriter().write(json);
+    }
 }

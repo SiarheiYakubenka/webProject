@@ -11,7 +11,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-@WebFilter(filterName = "LoginFilter", servletNames = {"AppController", "UploadController"} )
+@WebFilter(filterName = "LoginFilter", servletNames = {"AppController", "UploadController", "DownloadFileController",
+"DeleteFileController"} )
 public class LoginFilter implements Filter {
     public void destroy() {
     }
@@ -23,9 +24,20 @@ public class LoginFilter implements Filter {
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute(Constants.KEY_USER);
         if (user == null || user.getRole() == Role.FAKER) {
-            RequestDispatcher dispatcher = request.getServletContext().getRequestDispatcher(Constants.JUMP_LOGIN);
-            dispatcher.forward(request, response);
-            return;
+            String headerName = request.getHeader("x-requested-with");
+            if(headerName == null) {
+                RequestDispatcher dispatcher = request.getServletContext().getRequestDispatcher(Constants.JUMP_LOGIN);
+                dispatcher.forward(request, response);
+                return;
+            } else {
+                response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+                response.setContentType("text/plain");
+                response.getWriter().write("Error");
+                response.getWriter().close();
+                return;
+            }
+
+
         }
         chain.doFilter(req, resp);
     }

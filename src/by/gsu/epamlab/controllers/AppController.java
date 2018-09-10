@@ -1,18 +1,14 @@
 package by.gsu.epamlab.controllers;
 
-import by.gsu.epamlab.command.CommandException;
-import by.gsu.epamlab.command.TaskLogic;
-import by.gsu.epamlab.command.factory.ActionFactory;
-import by.gsu.epamlab.command.ifaces.ActionCommand;
+import by.gsu.epamlab.bll.command.CommandException;
+import by.gsu.epamlab.bll.TaskLogic;
 import by.gsu.epamlab.ifaces.BaseController;
 import by.gsu.epamlab.model.beans.Task;
-import by.gsu.epamlab.command.enums.TaskKindEnum;
 import by.gsu.epamlab.model.impl.DaoException;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import javax.servlet.ServletException;
-import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -41,14 +37,10 @@ public class AppController extends BaseController {
         try {
             SessionRequestContent content = new SessionRequestContent(request);
             List<Task> tasks = TaskLogic.getTasks(content);
-            if (tasks != null) {
-                Gson gsonBuilder = new GsonBuilder().create();
-                String json = gsonBuilder.toJson(tasks);
-                response.setContentType(Constants.TYPE_JSON);
-                response.setCharacterEncoding(Constants.UTF_8);
-                response.getWriter().write(json);
-            }
-        } catch (RuntimeException e) {
+            Gson gsonBuilder = new GsonBuilder().create();
+            String json = gsonBuilder.toJson(tasks);
+            forwardJSON(response, json);
+        } catch (DaoException e) {
             LOGGER.log(Level.SEVERE, e.toString(), e);
         }
     }
@@ -64,10 +56,9 @@ public class AppController extends BaseController {
             success = "false";
         }
         String json = "[{\"ok\":" + success + "}]";
-        response.setContentType(Constants.TYPE_JSON);
-        response.setCharacterEncoding(Constants.UTF_8);
-        response.getWriter().write(json);
+        forwardJSON(response, json);
 
     }
+
 
 }

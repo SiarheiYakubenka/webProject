@@ -1,4 +1,4 @@
-package by.gsu.epamlab.command.enums;
+package by.gsu.epamlab.bll.command.enums;
 
 import by.gsu.epamlab.controllers.Constants;
 import by.gsu.epamlab.controllers.SessionRequestContent;

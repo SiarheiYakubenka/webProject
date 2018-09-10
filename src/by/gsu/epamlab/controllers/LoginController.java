@@ -53,7 +53,7 @@ public class LoginController extends BaseController {
             HttpSession session = request.getSession();
             session.setAttribute(Constants.KEY_USER, user);
 
-            response.sendRedirect(Constants.JUMP_APP);
+            response.sendRedirect(request.getContextPath() + Constants.JUMP_APP);
         } else {
             // alternative workflow
             forwardError(Constants.JUMP_LOGIN, Constants.ERROR_PASSWORD, request, response);

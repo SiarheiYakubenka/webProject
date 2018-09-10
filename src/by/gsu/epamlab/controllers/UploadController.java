@@ -51,7 +51,7 @@ public class UploadController extends HttpServlet {
                         LOGGER.info(uploadedFile.getAbsolutePath());
                         item.write(uploadedFile);
                         IFileDAO fileDAO = DAOFactory.getDAO(IFileDAO.class);
-                        fileDAO.upload(user.getName(), fileName, Integer.parseInt(strId));
+                        fileDAO.upload(fileName, Integer.parseInt(strId));
 
                         response.setContentType("text/plain");
                         response.setCharacterEncoding("UTF-8");

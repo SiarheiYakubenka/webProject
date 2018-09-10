@@ -1,13 +1,13 @@
-package by.gsu.epamlab.command;
+package by.gsu.epamlab.bll.command;
 
-import by.gsu.epamlab.command.ifaces.ActionCommand;
-import by.gsu.epamlab.command.ifaces.BaseCommand;
-import by.gsu.epamlab.command.ifaces.ITaskCommand;
+import by.gsu.epamlab.bll.command.ifaces.ActionCommand;
+import by.gsu.epamlab.bll.command.ifaces.BaseCommand;
+import by.gsu.epamlab.bll.command.ifaces.ITaskCommand;
 import by.gsu.epamlab.controllers.SessionRequestContent;
 import by.gsu.epamlab.ifaces.ITaskDAO;
 import by.gsu.epamlab.model.beans.Task;
 
-public class RemoveCommand extends BaseCommand implements ActionCommand {
+public class DelCommand extends BaseCommand implements ActionCommand {
     @Override
     public void execute(SessionRequestContent content, ITaskDAO taskDAO) {
         processCommand(content, new ITaskCommand() {
@@ -18,7 +18,7 @@ public class RemoveCommand extends BaseCommand implements ActionCommand {
 
             @Override
             public void action(String userName, int... ids) {
-                taskDAO.remove(userName, ids);
+                taskDAO.delete(ids);
             }
         });
     }

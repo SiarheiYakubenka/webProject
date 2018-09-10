@@ -14,31 +14,18 @@ public class ConstantsSQL {
     public static final String PARAM_PASS = "password";
     public static final String ADD_USER = "insert into users (login, password) values (?, ?)";
     public static final String USER_ID = "select id from users where login=?";
-    public static final String SELECT_TASKS = "select * from '?'_tasks where '?'";
-    public static final String CREATE_TASKS =  "create table '?'_tasks (" +
-            "  id int not null auto_increment," +
-            "  description varchar(255) not null," +
-            "  completionsDate datetime not null ," +
-            "  isFixed bool not null default false," +
-            "  isDelMarked bool not null default false," +
-            "  fileName varchar(255)" +
-            ");";
     public static final String KEY_DESCRIPTION = "description";
     public static final String KEY_DATE = "completionsDate";
     public static final String KEY_IS_FIXED = "isFixed";
     public static final String KEY_IS_DEL = "isDelMarked";
     public static final String KEY_ID = "id";
-    public static final String ADD_TASK = "insert into '?'_tasks (description, completionsDate)" +
-            " values (?, ?);";
-    public static final String DELETE_TASK = "delete from '?'_tasks" +
-            " where description=? and completionsDate=?;";
-    public static final String TASK_ID = "select id from '?'_tasks" +
-            " where description=? and completionsDate=?;";
-    public static final String UPDATE_TASK = "update '?'_tasks set" +
-            "  description=?," +
-            "  completionsDate=?," +
-            "  isFixed=?," +
-            "  isDelMarked=?" +
-            "  where id=?";
+    public static final String ADD_TASK = "insert into tasks (description, completionsDate, userId) values (?, ?, ?);";
+    public static final String DELETE_TASK = "update tasks set isDelMarked=true where id=?";
+    public static final String UPDATE_TASK = "update tasks set description=?, completionsDate=? where userId=? AND id=";
     public static final String KEY_FILENAME = "fileName";
+    public static final String SELECT_TASKS_HEADER = "select * from tasks where userId=? AND ";
+    public static final String FIX_TASK = "update tasks set isFixed=true where id=?";
+    public static final String RECOVER_TASK = "update tasks set isDelMarked=false, isFixed=false where id=?";
+    public static final String REMOVE_TASK = "delete from tasks where id=?";
+    public static final String DELETE_FILE = "update tasks set fileName=null where id=?";
 }

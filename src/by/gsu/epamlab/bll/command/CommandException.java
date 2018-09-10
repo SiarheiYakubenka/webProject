@@ -1,4 +1,4 @@
-package by.gsu.epamlab.command;
+package by.gsu.epamlab.bll.command;
 
 public class CommandException extends RuntimeException{
     public CommandException() {}

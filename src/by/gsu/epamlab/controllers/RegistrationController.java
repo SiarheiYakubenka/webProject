@@ -23,7 +23,7 @@ public class RegistrationController extends BaseController {
         String confPassword = request.getParameter(ConstantsJSP.KEY_CONF_PASSWORD);
 
         if (login == null || password == null || confPassword == null) {
-            response.sendRedirect(Constants.REG + Constants.ERROR_NULL);
+            forwardError(Constants.JUMP_REG, Constants.ERROR_NULL, request, response);
             return;
         }
 
@@ -32,12 +32,12 @@ public class RegistrationController extends BaseController {
         confPassword = confPassword.trim();
         if (Constants.KEY_EMPTY.equals(login)
                 || Constants.KEY_EMPTY.equals(password)) {
-            response.sendRedirect(Constants.REG + Constants.ERROR_EMPTY);
+            forwardError(Constants.JUMP_REG, Constants.ERROR_EMPTY, request, response);
             return;
         }
 
         if (!password.equals(confPassword)) {
-            response.sendRedirect(Constants.REG + Constants.ERROR_PASSWORDS);
+            forwardError(Constants.JUMP_REG, Constants.ERROR_PASSWORDS, request, response);
             return;
         }
 
@@ -46,15 +46,15 @@ public class RegistrationController extends BaseController {
         try {
             isAdd = userDAO.addUser(login, password);
         }catch (DaoException e){
-            response.sendRedirect(Constants.REG + Constants.ERROR_SOURCE);
+            forwardError(Constants.JUMP_REG, Constants.ERROR_SOURCE, request, response);
             return;
         }
         if (isAdd) {
             HttpSession session = request.getSession();
             session.setAttribute(Constants.KEY_USER, new User(login, password, Role.USER));
-            response.sendRedirect(Constants.NAME_PROJECT_ROOT);
+            response.sendRedirect(request.getContextPath() + Constants.NAME_PROJECT_ROOT);
         } else {
-            response.sendRedirect(Constants.REG + Constants.ERROR_EXIST);
+            forwardError(Constants.JUMP_REG, Constants.ERROR_EXIST, request, response);
         }
     }
 

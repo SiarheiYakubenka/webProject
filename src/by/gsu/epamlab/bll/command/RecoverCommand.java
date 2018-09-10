@@ -1,8 +1,8 @@
-package by.gsu.epamlab.command;
+package by.gsu.epamlab.bll.command;
 
-import by.gsu.epamlab.command.ifaces.ActionCommand;
-import by.gsu.epamlab.command.ifaces.BaseCommand;
-import by.gsu.epamlab.command.ifaces.ITaskCommand;
+import by.gsu.epamlab.bll.command.ifaces.ActionCommand;
+import by.gsu.epamlab.bll.command.ifaces.BaseCommand;
+import by.gsu.epamlab.bll.command.ifaces.ITaskCommand;
 import by.gsu.epamlab.controllers.SessionRequestContent;
 import by.gsu.epamlab.ifaces.ITaskDAO;
 import by.gsu.epamlab.model.beans.Task;
@@ -17,7 +17,7 @@ public class RecoverCommand extends BaseCommand implements ActionCommand {
 
             @Override
             public void action(String userName, int... ids) {
-                taskDAO.recover(userName, ids);
+                taskDAO.recover(ids);
             }
         });
     }

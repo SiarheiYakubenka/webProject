@@ -13,39 +13,45 @@ $(document).ready(function(){
                 $('#buttons-checkboxOverdue').hide();
                 $('#overdue').empty();
                 showAddButton();
-                    switch (kindTask) {
-                        case 'today' :
-                            var today = 0;
-                            $('#curDate').html(getDate(today));
-                            showTodayAndOverdue(data);
-                            break;
-                        case 'tomorrow' :
-                            var tomorrow = 1;
-                            $('#tomorrowDate').html(getDate(tomorrow));
-                            showTomorrowTasks(data);
-                            break;
-                        case 'someday' :
-                            showSomedayTasks(data);
-                            break;
-                        case 'fixed' :
-                            showFixedTasks(data);
-                            hideAddButton();
-                            break;
-                        case 'trash' :
-                            showTrashTasks(data);
-                            hideAddButton();
-                            break;
-                        default :
-                            showMessage();
-                    }
+                switch (kindTask) {
+                    case 'today' :
+                        var today = 0;
+                        $('#curDate').html(getDate(today));
+                        showTodayAndOverdue(data);
+                        break;
+                    case 'tomorrow' :
+                        var tomorrow = 1;
+                        $('#tomorrowDate').html(getDate(tomorrow));
+                        showTomorrowTasks(data);
+                        break;
+                    case 'someday' :
+                        showSomedayTasks(data);
+                        break;
+                    case 'fixed' :
+                        showFixedTasks(data);
+                        hideAddButton();
+                        break;
+                    case 'trash' :
+                        showTrashTasks(data);
+                        hideAddButton();
+                        break;
+                    default :
+                        showMessage();
+                }
             },
-            error: function (e) {
-                alert('Error' + e);
+            error: function (xhr) {
+                if (xhr.status === 403) {
+                    jumpToLogin();                }
             }
         });
     });
 
     document.getElementById('today').click();
+
+    function jumpToLogin() {
+        document.location.href = "login";
+        return false;
+    }
 
     function setDefaultDate(day) {
         var dt = $('#completionsDate');
@@ -100,28 +106,29 @@ $(document).ready(function(){
         if (data.length > 0) {
             var list = getTableHeader();
             var overdueTasks = "<br/><div class='alert alert-danger'><h3>Overdue</h3></div><table class='table'>" +
-                "<tr><td colspan='6'><input id='checkAllOverdue' type='checkbox'/></td></tr>";
+                "<tr><td colspan='7'><input id='checkAllOverdue' type='checkbox'/></td></tr>";
             var date;
             var countOverdue = 0;
             for (var i = 0; i < data.length; i++) {
                 date = strToDate(data[i].completionsDate);
                 var now = new Date();
                 var today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+                var file = getButtonMod('#uploadFile', 'Add File', 'upload-file');
+                if (data[i].fileName) {
+                    file = getDropBox(data[i].fileName);
+                }
                 if (date < today) {
                     overdueTasks += "<tr id='"+  data[i].id + "' ><td><input  type='checkbox'/></td><td><p " + getCSSdescr() + ">"
                         + data[i].description + "</p></td><td>" +
                         dateFormat(date) + "</td><td>" +
                         getButton(' Fix ', 'fix') + "</td><td>" +
                         getButtonMod('#updateTask', 'Update', 'update') + "</td><td>" +
-                        getButtonMod('#deleteTask', 'Delete', 'delete-task') + "</td></tr>";
+                        getButtonMod('#deleteTask', 'Delete', 'delete-task') + "</td><td>" +
+                        file + "</td></tr>";
                     countOverdue++;
                 } else {
-                    var file = getButtonMod('#uploadFile', 'Add File', 'upload-file');
-                    if (data[i].fileName != null) {
-                        file = getDropBox(data[i].fileName);
-                    }
-                    list += "<tr id='"+  data[i].id + "' ><td><input  type='checkbox'/></td><td class='descrptn'>"
-                        + data[i].description + "</td><td style='display: none'>" +
+                    list += "<tr id='"+  data[i].id + "' ><td><input  type='checkbox'/></td><td class='descrptn'><p " +
+                        getCSSdescr() + ">" + data[i].description + "</p></td><td style='display: none'>" +
                         dateFormat(strToDate(data[i].completionsDate)) + "</td><td>" +
                         getButton(' Fix ', 'fix') + "</td><td>" +
                         getButtonMod('#updateTask', 'Update', 'update') + "</td><td>" +
@@ -149,12 +156,11 @@ $(document).ready(function(){
             var list = getTableHeader();
             for (var i = 0; i < data.length; i++) {
                 var file = getButtonMod('#uploadFile', 'Add File', 'upload-file');
-                if (data[i].fileName != null) {
-
+                if (data[i].fileName) {
                     file = getDropBox(data[i].fileName);
                 }
-                list += "<tr id='"+  data[i].id + "' ><td><input type='checkbox'/></td><td class='descrptn'>"
-                    + data[i].description + "</td><td style='display: none'>" +
+                list += "<tr id='"+  data[i].id + "' ><td><input type='checkbox'/></td><td class='descrptn'><p " +
+                    getCSSdescr() + ">" + data[i].description + "</p></td><td style='display: none'>" +
                     dateFormat(strToDate(data[i].completionsDate)) + "</td><td>" +
                     getButton(' Fix ', 'fix') + "</td><td>" +
                     getButtonMod('#updateTask', 'Update', 'update') + "</td><td>" +
@@ -173,12 +179,11 @@ $(document).ready(function(){
             var list = getTableHeader();
             for (var i = 0; i < data.length; i++) {
                 var file = getButtonMod('#uploadFile', 'Add File', 'upload-file');
-                if (data[i].fileName != null) {
-
+                if (data[i].fileName) {
                     file = getDropBox(data[i].fileName);
                 }
-                list += "<tr id='"+  data[i].id + "' ><td><input type='checkbox'/></td><td class='descrptn'>"
-                    + data[i].description + "</td><td>" +
+                list += "<tr id='"+  data[i].id + "' ><td><input type='checkbox'/></td><td class='descrptn'><p " +
+                    getCSSdescr() + ">" + data[i].description + "</p></td><td>" +
                     dateFormat(strToDate(data[i].completionsDate)) + "</td><td>" +
                     getButton(' Fix ', 'fix') + "</td><td>" +
                     getButtonMod('#updateTask', 'Update', 'update') + "</td><td>" +
@@ -196,10 +201,15 @@ $(document).ready(function(){
         if (data.length > 0) {
             var list = getTableHeader();
             for (var i = 0; i < data.length; i++) {
-                list += "<tr id='"+  data[i].id + "' ><td><input type='checkbox'/></td><td class='descrptn'>"
-                    + data[i].description + "</td><td>" +
+                var file = "";
+                if (data[i].fileName) {
+                    file = getDropBox(data[i].fileName);
+                }
+                list += "<tr id='"+  data[i].id + "' ><td><input type='checkbox'/></td><td class='descrptn'><p " +
+                    getCSSdescr() + ">" + data[i].description + "</p></td><td>" +
                     dateFormat(strToDate(data[i].completionsDate)) + "</td><td>" +
-                    getButtonMod('#deleteTask', 'Delete', 'delete-task')+ "</td></tr>";
+                    getButtonMod('#deleteTask', 'Delete', 'delete-task')+ "</td><td>" +
+                    file + "</td></tr>";
             }
             list += "</table>";
             $('.tasks').html(list);
@@ -213,10 +223,14 @@ $(document).ready(function(){
             $('#del-all').show();
             var list = getTableHeader();
             for (var i = 0; i < data.length; i++) {
-                list += "<tr id='"+  data[i].id + "' ><td><input type='checkbox'/></td><td class='descrptn'>"
-                    + data[i].description + "</td><td>" +
+                var file = "";
+                if (data[i].fileName) {
+                    file = getDropBox(data[i].fileName);
+                }
+                list += "<tr id='"+  data[i].id + "' ><td><input type='checkbox'/></td><td class='descrptn'><p " +
+                    getCSSdescr() + ">" + data[i].description + "</p></td><td>" +
                     dateFormat(strToDate(data[i].completionsDate)) + "</td><td>" +
-                    getButton('Recover', 'recover') + "</td><td>" +
+                     file + "</td><td>" + getButton('Recover', 'recover') + "</td><td>" +
                     getButtonMod('#deleteTask', 'Remove', 'delete-task')+ "</td></tr>";
         }
         list += "</table>";
@@ -233,17 +247,6 @@ $(document).ready(function(){
 
     function getTableHeader() {
         return "<table class='table'><tr><td colspan='7'><input id='checkAll' type='checkbox'/></td></tr>";
-    }
-
-    function getTableRow(data) {
-        return "<tr><td><input id='"+  data[i].id +"' type='checkbox'/></td><td>" + data[i].description + "</td></tr>";
-
-    }
-
-    function getTableRowWithDate(data) {
-        return "<tr><td><input id='"+  data[i].id + "' type='checkbox'/></td><td>" + data[i].description + "</td><td>" +
-            dateFormat(strToDate(data)) + "</td></tr>";
-
     }
     
     function getButtonMod(myModal, value, clazz) {
@@ -345,13 +348,15 @@ $(document).ready(function(){
 
         var xhr = new XMLHttpRequest();
 
-        xhr.open("POST","/upload", true);
+        xhr.open("POST","upload", true);
         xhr.send(formdata);
 
         xhr.onload = function() {
             alert(this.responseText);
             if (this.status === 200) {
                 document.getElementById(getKindTask()).click();
+            } else if (this.status === 403) {
+                jumpToLogin();
             }
         };
     });
@@ -381,8 +386,32 @@ $(document).ready(function(){
     $('#delete').click(function () {
         var idTask = $(this).prop('id-task');
         var cmd = $(this).prop('cmd');
-        var prop = 'command=' + cmd + '&id=' + idTask;
-        ajaxPost(prop);
+        if (cmd === 'Delete') {
+            var data = 'command=' + cmd + '&id=' + idTask;
+            ajaxPost(data);
+            $(this).prop('cmd', '');
+        } else {
+            var file = $(this).prop('filename');
+
+            $.ajax({
+                method: 'get',
+                url: 'delete',
+                data: 'filename=' + file + '&id=' + idTask,
+                success: function (success) {
+                    if ( success[0].ok) {
+                        document.getElementById(getKindTask()).click();
+                    }else {
+                        alert('Error database');
+                    }
+                },
+                error: function (xhr) {
+                    if (xhr.status === 403) {
+                        jumpToLogin();
+                    } else
+                    alert('Error ' + xhr.responseText);
+                }
+            });
+        }
     });
 
     function ajaxPost(prop) {
@@ -398,8 +427,11 @@ $(document).ready(function(){
                     alert('Error database');
                 }
             },
-            error: function (e) {
-                alert('Error' + e);
+            error: function (xhr) {
+                if (xhr.status === 403) {
+                    jumpToLogin();
+                } else
+                alert('Error' + xhr.responseText);
             }
         });
     }
@@ -518,24 +550,33 @@ $(document).ready(function(){
 
     function getDropBox(value) {
         return "<div class='btn-group'>" +
-            "<button type='button' class='btn btn-primary'>" + value + "</button>" +
+            "<a class='btn btn-primary' href=\"download?filename=" + value + "\">" + value + "</a>" +
             "<button type='button' class='btn btn-primary dropdown-toggle dropdown-toggle-split'" +
         "data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'><span class='sr-only'>Toggle Dropdown</span>" +
-        "</button><div class='dropdown-menu'><a class='dropdown-item' href='#'>Download</a><a class='dropdown-item' href='#'>Delete</a>" +
+        "</button><div class='dropdown-menu'><a class='dropdown-item' href=\"download?filename=" + value
+            + "\">Download</a><a class='dropdown-item del-file' data-toggle='modal' data-target='#deleteTask' href='#'>Delete</a>" +
         "</div>"
     }
 
     function getCSSdescr() {
         return "style= 'max-width: 300px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; cursor:pointer'" +
-            " data-toggle='popover' data-trigger='focus' ";
+            " class='descrptn-show' data-toggle='modal' data-target='#myModal'";
     }
 
-    container.on('click','[data-toggle="popover"]', function () {
-        $(this).attr('data-content', $(this).text());
-
-        $('[data-toggle="popover"]').each(function(){$(this).popover()});
+    container.on('click','.descrptn-show', function () {
+        $('#desc-show').text($(this).text());
+        $('#date-show').text($(this).parent().parent().children().eq(2).text());
 
     } );
 
+    container.on('click', '.del-file', function () {
+        var parentNode = $(this).parent().parent();
+        var idTask = parentNode.parent().parent().attr('id');
+        var file = parentNode.children().eq(0).text();
+        var delBtn = $('#delete');
+        $('#del-body').text("Are you sure you want to delete \"" + file + "\" ?");
+        delBtn.prop('id-task', idTask);
+        delBtn.prop('filename', file);
+    });
 
 });

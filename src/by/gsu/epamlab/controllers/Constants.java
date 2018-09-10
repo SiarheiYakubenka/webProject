@@ -1,5 +1,7 @@
 package by.gsu.epamlab.controllers;
 
+import java.util.Locale;
+
 public class Constants {
     public static final String NAME_PROJECT_ROOT = "/";
     public static final String KEY_USER = "user";
@@ -30,4 +32,7 @@ public class Constants {
     public static final String JUMP_APP = "/app" ;
     public static final Object NEW_NAME = "(1)";
     public static final String UPLOADS = "WEB-INF/uploads/";
+    public static final String KEY_FILENAME = "filename";
+    public static final String MESSAGE_DOWNLOAD = "Local file <%s>, will write to client as <%s>";
+    public static final String POOL_NAME = "java:comp/env/jdbc/todo";
 }
