@@ -36,8 +36,6 @@ public class LoginFilter implements Filter {
                 response.getWriter().close();
                 return;
             }
-
-
         }
         chain.doFilter(req, resp);
     }

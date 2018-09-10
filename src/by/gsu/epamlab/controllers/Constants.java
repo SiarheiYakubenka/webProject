@@ -1,7 +1,5 @@
 package by.gsu.epamlab.controllers;
 
-import java.util.Locale;
-
 public class Constants {
     public static final String NAME_PROJECT_ROOT = "/";
     public static final String KEY_USER = "user";
@@ -35,4 +33,11 @@ public class Constants {
     public static final String KEY_FILENAME = "filename";
     public static final String MESSAGE_DOWNLOAD = "Local file <%s>, will write to client as <%s>";
     public static final String POOL_NAME = "java:comp/env/jdbc/todo";
+    public static final String TYPE_TEXT = "text/plain";
+    public static final String ERROR_NO_RIGHTS = "Error. No rights to write\n\r";
+    public static final String ERROR_UPLOAD = "Error. File was not upload\n\r";
+    public static final String MESSAGE_FILE_HEADER = "File \"";
+    public static final String MESSAGE_FILE_FOOTER = "\" is successfully uploaded\n\r";
+    public static final String DISPOSITION = "Content-Disposition";
+    public static final String TRANSFER_ENCODING = "Content-Transfer-Encoding";
 }

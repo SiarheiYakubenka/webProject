@@ -53,12 +53,12 @@ public class UploadController extends HttpServlet {
                         IFileDAO fileDAO = DAOFactory.getDAO(IFileDAO.class);
                         fileDAO.upload(fileName, Integer.parseInt(strId));
 
-                        response.setContentType("text/plain");
-                        response.setCharacterEncoding("UTF-8");
+                        response.setContentType(Constants.TYPE_TEXT);
+                        response.setCharacterEncoding(Constants.UTF_8);
 
-                        ajaxUpdateResult = "File \"" + fileName + "\" is successfully uploaded\n\r";
+                        ajaxUpdateResult = Constants.MESSAGE_FILE_HEADER + fileName + Constants.MESSAGE_FILE_FOOTER;
                     } else {
-                        ajaxUpdateResult = "Error. No rights to write\n\r";
+                        ajaxUpdateResult =  Constants.ERROR_NO_RIGHTS;
                     }
 
 
@@ -66,7 +66,7 @@ public class UploadController extends HttpServlet {
             }
         } catch (Exception e) {
             LOGGER.log(Level.SEVERE, e.toString(), e);
-            ajaxUpdateResult = "Error. File was not upload\n\r";
+            ajaxUpdateResult = Constants.ERROR_UPLOAD;
         }
         response.getWriter().print(ajaxUpdateResult);
     }

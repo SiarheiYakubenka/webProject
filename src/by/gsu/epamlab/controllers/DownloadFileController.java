@@ -37,8 +37,8 @@ public class DownloadFileController extends HttpServlet {
 
         response.setContentType((mimetype != null) ? mimetype : "application/octet-stream");
         response.setContentLength((int) inputFile.length());
-        response.setHeader("Content-Transfer-Encoding", "binary");
-        response.setHeader("Content-Disposition", "attachment; filename=\"" + fileToWrite + "\"");
+        response.setHeader(Constants.TRANSFER_ENCODING, "binary");
+        response.setHeader(Constants.DISPOSITION, "attachment; filename=\"" + fileToWrite + "\"");
 
 
 
